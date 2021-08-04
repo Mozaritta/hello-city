@@ -3,10 +3,7 @@
 	Hello Home!
 {% endblock %}
 {% block body %}
+	<img src="/img/hi.jpg" alt="">
 	<h1>Hello let's try out the select radion buttons</h1>
-	<select name="qst1" id="">
-		<input type="radio" name="qst1" value="1">
-		<input type="radio" name="qst1" value="2">
-		<input type="radio" name="qst1" value="3">
-	</select>
+	<p>It's currently {{'now'|date('h:i A')}}.</p>
 {% endblock %}

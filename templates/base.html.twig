@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{app.request.locale}}">
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scal=1, shrink-to-fit=no">
 		<title>
 			{% block title 'Welcome!' %}
 		</title>
@@ -12,17 +13,18 @@
 		{% endblock %}
 	</head>
 	<body>
-		<main role="main"> {% block body %}{% endblock %}
-			</main>
-			<footer>
-				<p>
-					&copy; Copyright
-					{{'now'|date('Y')}}
-					&middot;<a href="{{path('app_about')}}"></a>
-				</p>
-			</footer>
-			{% block javascripts %}
-				{#{{ encore_entry_script_tags('app') }}#}
-			{% endblock %}
-		</body>
-	</html>
+		<main role="main">
+		{% block body %}{% endblock %}
+		</main>
+		<footer>
+			<p>
+				&copy; Copyright
+				{{'now'|date('Y')}}
+				&middot;<a href="{{path('app_city')}}"></a>
+			</p>
+		</footer>
+		{% block javascripts %}
+			{#{{ encore_entry_script_tags('app') }}#}
+		{% endblock %}
+	</body>
+</html>
