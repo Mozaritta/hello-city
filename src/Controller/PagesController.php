@@ -9,13 +9,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class PagesController extends AbstractController
 {
     /**
-     * @Route("/pages", name="pages")
+     * @Route("/home", name="pages")
      */
-    public function index(): Response
+    public function home(): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/PagesController.php',
-        ]);
+        // return $this->json([
+        //     'message' => 'Welcome to your new controller!',
+        //     'path' => 'src/Controller/PagesController.php',
+        // ]);
+        return $this->render('pages/home.html.twig');
     }
 }
