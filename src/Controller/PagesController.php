@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PagesController extends AbstractController
 {
     /**
-     * @Route("/home", name="pages")
+     * @Route("/home", name="app_home")
      */
     public function home(): Response
     {
@@ -18,5 +18,17 @@ class PagesController extends AbstractController
         //     'path' => 'src/Controller/PagesController.php',
         // ]);
         return $this->render('pages/home.html.twig');
+    }
+
+    /**
+     * @Route("/city", name="app_city")
+     */
+    public function city(): Response
+    {
+        // return $this->json([
+        //     'message' => 'Welcome to your new controller!',
+        //     'path' => 'src/Controller/PagesController.php',
+        // ]);
+        return $this->render('pages/city.html.twig');
     }
 }

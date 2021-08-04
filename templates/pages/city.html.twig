@@ -1,6 +1,8 @@
 {% extends "base.html.twig" %}
-{% block title%}
-	Hello Home!
+{# {% block title 'Hello City | ' ~ parent() %} #}
+{% block title %}
+	Hello City |
+	{{parent()}}
 {% endblock %}
 {% block body %}
 	<h1>Hello let's try out the select radion buttons</h1>
