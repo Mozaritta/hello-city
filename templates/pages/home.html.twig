@@ -3,7 +3,7 @@
 	Hello Home!
 {% endblock %}
 {% block body %}
-	<h1 class="text-5xl font-semibold text-indigo-500">Hello let's try some stuff</h1>
-	<img src="{{ asset('/img/hi.jpg')}}" alt="" width=500>
+	<h1 class="mt-5 text-3xl sm:text-5xl font-semibold text-indigo-500">Hello let's try some stuff</h1>
+	<img src="{{ asset('/img/hi.jpg')}}" alt=""  class="h-64 sm:h-96 mt-12 mb-12 rounded shadow-md">
 	<p class="text-lg text-gray-800">It's currently {{'now'|date('h:i A')}}.</p>
 {% endblock %}
