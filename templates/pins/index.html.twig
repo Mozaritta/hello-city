@@ -9,7 +9,13 @@
 </style> #}
 
 <div class="example-wrapper">
-    <h1>All pins! ✅</h1>
+    {% if (pins|length == 1) %}
+        <h1>1 Pin ✅</h1>
+    {% elseif (pins|length == 0) %}
+        <h1>No pins! ✅</h1>  
+    {% else %}
+        <h1>{{pins|length}} pins! ✅</h1> 
+    {% endif %}
 
     {% for pin in pins %}
     <article>
