@@ -19,10 +19,17 @@ class PinsController extends AbstractController
         return $this->render('pins/index.html.twig', compact('pins'));
     }
     /**
-     * @Route("/pin/{id<[0-9]+>?0}", name="app_pins_show")
+     * @Route("/pin/{id<[0-9]+>}",methods={"GET","HEAD"}, name="app_pins_show")
      */
-    public function show(Pin $pin): Response
+    public function show(int $id): Response
     {
+        // $pin = ;
+        // return dd($_GET['pin']);
+        $connection = mysqli_connect("localhost", "root", "", "pinterest");
+        $query = "SELECT * FROM pins WHERE id = $id";
+        $result = mysqli_query($connection, $query);
+        $pin = mysqli_fetch_assoc($result);
+        // dd($pin);
         return $this->render('pins/show.html.twig', compact('pin'));
     }
 }
