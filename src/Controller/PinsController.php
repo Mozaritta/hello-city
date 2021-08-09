@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Pin;
 use App\Repository\PinRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 class PinsController extends AbstractController
 {
@@ -31,5 +34,21 @@ class PinsController extends AbstractController
         $pin = mysqli_fetch_assoc($result);
         // dd($pin);
         return $this->render('pins/show.html.twig', compact('pin'));
+    }
+
+    /**
+     * @Route("/pin/create", name="pin_create")
+     */
+    public function create(): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('title', TextType::class)
+            ->add('description', TextareaType::class)
+            // ->add('submit', SubmitType::class)
+            ->getForm();
+
+        return $this->render('pins/create.html.twig', [
+            'myForm' => $form->createView()
+        ]);
     }
 }
