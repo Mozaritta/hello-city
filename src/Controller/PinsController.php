@@ -70,10 +70,14 @@ class PinsController extends AbstractController
         ]);
     }
     /**
-     * @Route("/pins/{id<[0-9]+>}/edit", methods={"GET","POST"}, name="app_edit")
+     * @Route("/pin/edit/{id<[0-9]+>}", methods={"GET","HEAD"}, name="app_edit")
      */
-    public function edit(Request $request, Pin $pin, EntityManagerInterface $em): Response
+    public function edit(Request $request, int $id, EntityManagerInterface $em): Response
     {
+        $connection = mysqli_connect("localhost", "root", "", "pinterest");
+        $query = "SELECT * FROM pins WHERE id = $id";
+        $result = mysqli_query($connection, $query);
+        $pin = mysqli_fetch_assoc($result);
         $form = $this->createFormBuilder($pin)
             ->add('title', TextType::class)
             ->add('description', TextareaType::class)
@@ -85,8 +89,8 @@ class PinsController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
         return $this->render('pins/edit.html.twig', [
-            'pin ' => $pin,
-            'myForm' => $form->createView()
+            'pin' => $pin,
+            'form' => $form->createView()
         ]);
     }
 }
