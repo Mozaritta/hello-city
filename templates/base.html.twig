@@ -9,11 +9,21 @@
 		{# Run `composer require symfony/webpack-encore-bundle` #}
 		{# and uncomment the following Encore helpers to start using Symfony UX #}
 		{% block stylesheets %}
+		{% include "/pins/style.html.twig" %}
 			{#{{ encore_entry_link_tags('app') }}#}
-			<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 		{% endblock %}
 	</head>
-	<body class="flex flex-col justify-between items-center min-h-screen">
+	<body class="flex flex-col justify-between items-center">
+		<nav>
+			<ul>
+				<li>
+					<a href="{{ path('app_home')}}">Go Home</a>
+				</li>
+				<li>
+					<a href="{{ path('pin_create')}}">Create new pin</a>
+				</li>
+			</ul>
+		</nav>
 		<main role="main" class="my-6 flex flex-col items-center justify-center">
 		{% block body %}{% endblock %}
 		</main>
@@ -22,7 +32,7 @@
 				&copy; Copyright
 				{{'now'|date('Y')}}
 				&middot;
-				<a class="text-indigo-500 hover:text-indigo-600 underline" href="">City Home</a>
+				<a class="text-indigo-500 hover:text-indigo-600 underline" href="{{ path('app_home') }}">City Home</a>
 			</p>
 		</footer>
 		{% block javascripts %}

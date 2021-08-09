@@ -5,6 +5,9 @@
 {% block body %}
 
     <h1>Create Pin</h1>
-    {{form(myForm)}}
+    {{form_start(myForm)}}
+    {{ form_widget(myForm)}}
+    <input type="submit" value=" Create " >
+    {{form_end(myForm)}}
         
 {% endblock %}
