@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Pin;
+use App\Form\PinType;
 use App\Repository\PinRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+// use Symfony\Component\Form\Extension\Core\Type\TextType;
+// use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,12 +47,13 @@ class PinsController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $pin = new Pin;
-        $form = $this->createFormBuilder($pin)
-            // $form = $this->createFormBuilder(new Pin)
-            ->add('title', TextType::class)
-            ->add('description', TextareaType::class)
-            // // // ->add('submit', SubmitType::class)
-            ->getForm();
+        $form = $this->createForm(PinType::class, $pin);
+        // $form = $this->createFormBuilder($pin)
+        //     // $form = $this->createFormBuilder(new Pin)
+        //     ->add('title')
+        //     ->add('description')
+        //     // // // ->add('submit', SubmitType::class)
+        //     ->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,10 +80,11 @@ class PinsController extends AbstractController
         $query = "SELECT * FROM pins WHERE id = $id";
         $result = mysqli_query($connection, $query);
         $pin = mysqli_fetch_assoc($result);
-        $form = $this->createFormBuilder($pin)
-            ->add('title', TextType::class)
-            ->add('description', TextareaType::class)
-            ->getForm();
+        $form = $this->createForm(PinType::class, $pin);
+        // $form = $this->createFormBuilder($pin)
+        //     ->add('title')
+        //     ->add('description')
+        //     ->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
