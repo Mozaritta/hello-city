@@ -6,6 +6,7 @@ use App\Entity\Pin;
 use App\Form\PinType;
 use App\Repository\PinRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Id;
 // use Symfony\Component\Form\Extension\Core\Type\TextType;
 // use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,5 +96,15 @@ class PinsController extends AbstractController
             'pin' => $pin,
             'form' => $form->createView()
         ]);
+    }
+    /**
+     * @Route("/pin/delete/{id<[0-9]+>}", name="app_delete", methods={"GET", "HEAD", "POST", "DELETE"})
+     */
+    public function delete(PinRepository $pinRepository, int $id, EntityManagerInterface $em): Response
+    {
+        $pinn = $pinRepository->findOneBy(['id' => $id]);
+        $em->remove($pinn);
+        $em->flush();
+        return $this->redirectToRoute('app_home');
     }
 }
