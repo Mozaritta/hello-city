@@ -13,9 +13,11 @@
 			{#{{ encore_entry_link_tags('app') }}#}
 		{% endblock %}
 	</head>
-	<body class="flex flex-col justify-between items-center">
+	<body>
+	{{include('layouts/partials/_navbar.html.twig')}}
+	<div class="flex flex-col justify-between items-center">
 	{{include('layouts/partials/_flash_msg.html.twig')}}
-		<nav>
+		{# <nav>
 			<ul>
 				<li>
 					<a href="{{ path('app_home')}}">Go Home</a>
@@ -24,11 +26,11 @@
 					<a href="{{ path('pin_create')}}">Create new pin</a>
 				</li>
 			</ul>
-		</nav>
-		<main role="main" class="my-6 flex flex-col items-center justify-center">
+		</nav> #}
+		<main role="main" class="my-12 md:w-48  flex flex-col items-center justify-center">
 		{% block body %}{% endblock %}
 		</main>
-		<footer class="my-6">
+		<footer class="my-48">
 			<p class="text-gray-400">
 				&copy; Copyright
 				{{'now'|date('Y')}}
@@ -39,5 +41,6 @@
 		{% block javascripts %}
 			{% include "/layouts/js.html.twig" %}
 		{% endblock %}
+		</div>
 	</body>
 </html>
