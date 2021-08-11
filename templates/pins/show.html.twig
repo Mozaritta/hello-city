@@ -21,8 +21,8 @@
         </article>
         <nav>
             <ul>
-                <li><a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
-                <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
+                <li><a class="btn btn-primary btn-block" href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
+                <li><a class="btn btn-danger btn-block" href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a></li>
                 {# <li><a href="#" onclick="event.preventDefault(); confirm('You sure you want to delete?') && document.getElementById('js-form').submit();">Delete</a></li> #}
                 {# <form 
                     display="none"
