@@ -10,7 +10,8 @@
     </article>
     <a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a>
     <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
-    {# <form action="{{ path('app_delete', {id: pin.id}) }}" method="post">
+    {# <a href="#" onclick="event.preventDefault(); document.getElementById('js-form').submit();">Delete</a>
+    <form id="js-form" action="{{ path('app_delete', {id: pin.id}) }}" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <input type="submit" value="Delete">
     </form> #}
