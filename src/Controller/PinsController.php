@@ -34,13 +34,19 @@ class PinsController extends AbstractController
     {
         // $pin = ;
         // return dd($_GET['pin']);
-        // $connection = mysqli_connect("localhost", "root", "", "pinterest");
-        // $query = "SELECT * FROM pins WHERE id = $id";
-        // $result = mysqli_query($connection, $query);
-        // $pin = mysqli_fetch_assoc($result);
+        $connection = mysqli_connect("localhost", "root", "", "pinterest");
+        $query = "SELECT * FROM pins WHERE id = $id";
+        $result = mysqli_query($connection, $query);
+        $pinn = mysqli_fetch_assoc($result);
         $pin = $pinRepository->findOneBy(['id' => $id]);
-        // dd($pin);
-        return $this->render('pins/show.html.twig', compact('pin'));
+
+        if (isset($pinn['id'])) {
+            // dd($pin);
+            return $this->render('pins/show.html.twig', compact('pin'));
+        } else {
+            $message = "No such Pin in the database!";
+            return $this->render('pins/show.html.twig', compact('message'));
+        }
     }
 
     /**

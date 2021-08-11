@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title pin.title %}
-
 {% block body %}
+{% if message is same as "hello" %}
+    {% block title ":(" %}
+
 
     <article>
         <h1>{{ pin.title }}</h1>
@@ -17,5 +18,11 @@
         {# <input type="submit" value="Delete"> #}
     </form>
     <footer><a href="{{ path('app_home') }}">Go Home</a></footer>
+
+{% else %}
+    <article>
+        <h1>{{message}}</h1>
+    </article>
+{% endif %}
 
 {% endblock %}
