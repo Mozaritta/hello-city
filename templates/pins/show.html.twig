@@ -9,10 +9,11 @@
         <p> {{ pin.description }}</p>
     </article>
     <a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a>
-    <form action="{{ path('app_delete', {id: pin.id}) }}" method="post">
+    <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
+    {# <form action="{{ path('app_delete', {id: pin.id}) }}" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <input type="submit" value="Delete">
-    </form>
+    </form> #}
     <footer><a href="{{ path('app_home') }}">Go Home</a></footer>
 
 {% endblock %}

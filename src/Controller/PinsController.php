@@ -30,14 +30,15 @@ class PinsController extends AbstractController
     /**
      * @Route("/pin/{id<[0-9]+>}",methods={"GET","HEAD"}, name="app_pins_show")
      */
-    public function show(int $id): Response
+    public function show(PinRepository $pinRepository, int $id): Response
     {
         // $pin = ;
         // return dd($_GET['pin']);
-        $connection = mysqli_connect("localhost", "root", "", "pinterest");
-        $query = "SELECT * FROM pins WHERE id = $id";
-        $result = mysqli_query($connection, $query);
-        $pin = mysqli_fetch_assoc($result);
+        // $connection = mysqli_connect("localhost", "root", "", "pinterest");
+        // $query = "SELECT * FROM pins WHERE id = $id";
+        // $result = mysqli_query($connection, $query);
+        // $pin = mysqli_fetch_assoc($result);
+        $pin = $pinRepository->findOneBy(['id' => $id]);
         // dd($pin);
         return $this->render('pins/show.html.twig', compact('pin'));
     }
@@ -73,14 +74,11 @@ class PinsController extends AbstractController
         ]);
     }
     /**
-     * @Route("/pin/edit/{id<[0-9]+>}", methods={"GET","HEAD"}, name="app_edit")
+     * @Route("/pin/edit/{id<[0-9]+>}", methods={"GET","HEAD", "POST"}, name="app_edit")
      */
-    public function edit(Request $request, int $id, EntityManagerInterface $em): Response
+    public function edit(PinRepository $pinRepository, Request $request, int $id, EntityManagerInterface $em): Response
     {
-        $connection = mysqli_connect("localhost", "root", "", "pinterest");
-        $query = "SELECT * FROM pins WHERE id = $id";
-        $result = mysqli_query($connection, $query);
-        $pin = mysqli_fetch_assoc($result);
+        $pin = $pinRepository->findOneBy(['id' => $id]);
         $form = $this->createForm(PinType::class, $pin);
         // $form = $this->createFormBuilder($pin)
         //     ->add('title')
