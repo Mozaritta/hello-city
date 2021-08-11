@@ -22,6 +22,7 @@
     <article>
         <h2><a href="{{ path('app_pins_show',{'id': pin.id}) }}">{{ pin.title }}</a></h2>
         <h2>{{ pin.description }}</h2>
+        <small> Submitted {{ pin.createdAt|ago }}</small>
     </article>
     {% endfor %}
     

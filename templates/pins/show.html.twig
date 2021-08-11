@@ -12,32 +12,35 @@
     {% endif %}
     {% if found %}
     
-    {% block title "Show pin" %}
+        {% block title "Show pin" %}
+        <article>
+            <h1>{{ pin.title }}</h1>
+            <p> {{ pin.description|u.truncate(10, '... ', false) }}</p>
+            <small> Submitted {{ pin.createdAt|ago }}</small>
+             
+        </article>
+        <nav>
+            <ul>
+                <li><a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
+                {# <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a> #}
+                <li><a href="#" onclick="event.preventDefault(); confirm('You sure you want to delete?') && document.getElementById('js-form').submit();">Delete</a></li>
+                <form 
+                    display="none"
+                    id="js-form"
+                    action="{{ path('app_delete', {'id': pin.id}) }}"
+                    method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" value="{{ csrf_token('delete-pin' ~ pin.id) }}">
+                        {# <input type="submit" value="Delete"> #}
+                </form>
+            </ul>
+            </nav>
+        <footer><a href="{{ path('app_home') }}">Go Home</a></footer>
 
-
-    <article>
-        <h1>{{ pin.title }}</h1>
-        <p> {{ pin.description|u.truncate(10) }}</p>
-    </article>
-    <nav>
-    <ul>
-    <li>
-    <a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
-    {# <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a> #}
-    <li><a href="#" onclick="event.preventDefault(); confirm('You sure you want to delete?') && document.getElementById('js-form').submit();">Delete</a>
-    </li><form display="none" id="js-form" action="{{ path('app_delete', {'id': pin.id}) }}" method="post">
-        <input type="hidden" name="_method" value="DELETE">
-        <input type="hidden" value="{{ csrf_token('delete-pin' ~ pin.id) }}">
-        {# <input type="submit" value="Delete"> #}
-    </form>
-    </ul>
-    </nav>
-    <footer><a href="{{ path('app_home') }}">Go Home</a></footer>
-
-{% else %}
-    <article>
-        <h1>{{message}}</h1>
-    </article>
-{% endif %}
+    {% else %}
+        <article>
+            <h1>{{message}}</h1>
+        </article>
+    {% endif %}
 
 {% endblock %}
