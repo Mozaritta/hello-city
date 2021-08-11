@@ -1,22 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{% if message is same as "hello" %}
-    {% block title ":(" %}
+
+    {% set found = true %}
+        {% set test = 'No Pin' %}
+
+    {% if message is defined %}
+        {% set found = false %}
+    {% else %}
+        {% set test = pin.title %}
+    {% endif %}
+    {% if found %}
+    
+    {% block title "Show pin" %}
 
 
     <article>
         <h1>{{ pin.title }}</h1>
-        <p> {{ pin.description }}</p>
+        <p> {{ pin.description|u.truncate(10) }}</p>
     </article>
-    <a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a>
+    <nav>
+    <ul>
+    <li>
+    <a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
     {# <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a> #}
-    <a href="#" onclick="event.preventDefault(); confirm('You sure you want to delete?') && document.getElementById('js-form').submit();">Delete</a>
-    <form display="none" id="js-form" action="{{ path('app_delete', {'id': pin.id}) }}" method="post">
+    <li><a href="#" onclick="event.preventDefault(); confirm('You sure you want to delete?') && document.getElementById('js-form').submit();">Delete</a>
+    </li><form display="none" id="js-form" action="{{ path('app_delete', {'id': pin.id}) }}" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" value="{{ csrf_token('delete-pin' ~ pin.id) }}">
         {# <input type="submit" value="Delete"> #}
     </form>
+    </ul>
+    </nav>
     <footer><a href="{{ path('app_home') }}">Go Home</a></footer>
 
 {% else %}
