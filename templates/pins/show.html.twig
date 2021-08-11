@@ -9,12 +9,13 @@
         <p> {{ pin.description }}</p>
     </article>
     <a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a>
-    <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
-    {# <a href="#" onclick="event.preventDefault(); document.getElementById('js-form').submit();">Delete</a>
-    <form id="js-form" action="{{ path('app_delete', {id: pin.id}) }}" method="post">
+    {# <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a> #}
+    <a href="#" onclick="event.preventDefault(); confirm('You sure you want to delete?') && document.getElementById('js-form').submit();">Delete</a>
+    <form display="none" id="js-form" action="{{ path('app_delete', {id: pin.id}) }}" method="post">
         <input type="hidden" name="_method" value="DELETE">
-        <input type="submit" value="Delete">
-    </form> #}
+        <input type="hidden" value="{{ csrf_token('delete-pin' ~ pin.id) }}">
+        {# <input type="submit" value="Delete"> #}
+    </form>
     <footer><a href="{{ path('app_home') }}">Go Home</a></footer>
 
 {% endblock %}
