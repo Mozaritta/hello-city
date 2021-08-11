@@ -11,7 +11,7 @@
     <a href="{{ path('app_edit', {id: pin.id}) }}">Edit</a>
     {# <a href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a> #}
     <a href="#" onclick="event.preventDefault(); confirm('You sure you want to delete?') && document.getElementById('js-form').submit();">Delete</a>
-    <form display="none" id="js-form" action="{{ path('app_delete', {id: pin.id}) }}" method="post">
+    <form display="none" id="js-form" action="{{ path('app_delete', {'id': pin.id}) }}" method="post">
         <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" value="{{ csrf_token('delete-pin' ~ pin.id) }}">
         {# <input type="submit" value="Delete"> #}
