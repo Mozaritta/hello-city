@@ -45,6 +45,10 @@ class PinsController extends AbstractController
             return $this->render('pins/show.html.twig', compact('pin'));
         } else {
             $message = "No such Pin in the database!";
+            $this->addFlash(
+                'success',
+                $message
+            );
             return $this->render('pins/show.html.twig', compact('message'));
         }
     }
@@ -72,11 +76,15 @@ class PinsController extends AbstractController
             // // $pin->setDescription($data['description']);
             $em->persist($pin);
             $em->flush();
+            $this->addFlash(
+                'success',
+                'Pin added successfully'
+            );
             return $this->redirectToRoute('app_home');
         }
 
         return $this->render('pins/create.html.twig', [
-            'myForm' => $form->createView()
+            'form' => $form->createView()
         ]);
     }
     /**
@@ -94,6 +102,10 @@ class PinsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
+            $this->addFlash(
+                'info',
+                'Pin updated successfully'
+            );
             return $this->redirectToRoute('app_home');
         }
         return $this->render('pins/edit.html.twig', [
@@ -107,10 +119,15 @@ class PinsController extends AbstractController
     public function delete(Request $request, PinRepository $pinRepository, int $id, EntityManagerInterface $em): Response
     {
         $pinn = $pinRepository->findOneBy(['id' => $id]);
-        if ($this->isCsrfTokenValid('delete-pin', $pinn->getId(), $request->request->get('csrf_token'))) {
-            $em->remove($pinn);
-            $em->flush();
-        }
+        // if ($this->isCsrfTokenValid('delete-pin', $pinn->getId(), $request->request->get('csrf_token'))) {
+        $em->remove($pinn);
+        $em->flush();
+        $message = 'Pin deleted successfully';
+        $this->addFlash(
+            'danger',
+            $message
+        );
+        // }
         return $this->redirectToRoute('app_home');
     }
 }
