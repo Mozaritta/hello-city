@@ -9,7 +9,7 @@
 </style> #}
 
 <div class="example-wrapper">
-    <h1>{% if (pins|length == 1) %}
+    <h2 class="text-4xl mb-4">{% if (pins|length == 1) %}
         1 Pin ✅
     {% elseif (pins|length == 0) %}
         No pins! ✅
@@ -20,9 +20,9 @@
 
     {% for pin in pins %}
     <article>
-        <h2><a href="{{ path('app_pins_show',{'id': pin.id}) }}">{{ pin.title }}</a></h2>
-        <h2>{{ pin.description }}</h2>
-        <small> Submitted {{ pin.createdAt|ago }}</small>
+        <h2 class="text-2xl mb-2"><a href="{{ path('app_pins_show',{'id': pin.id}) }}">{{ pin.title }}</a></h2>
+        <h2 class="text-1xl">{{ pin.description }}</h2>
+        <small class="text-center mb-2"> Submitted {{ pin.createdAt|ago }}</small>
     </article>
     {% endfor %}
     
