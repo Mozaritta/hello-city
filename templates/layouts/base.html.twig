@@ -10,13 +10,13 @@
 		{# and uncomment the following Encore helpers to start using Symfony UX #}
 		{% block stylesheets %}
 		{% include "/layouts/style.html.twig" %}
-			{#{{ encore_entry_link_tags('app') }}#}
+			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
 	</head>
 	<body>
 	{{include('layouts/partials/_navbar.html.twig')}}
-	<div class="flex flex-col justify-between items-center">
 	{{include('layouts/partials/_flash_msg.html.twig')}}
+	<div class="flex flex-col justify-between items-center mt-4">
 		{# <nav>
 			<ul>
 				<li>
@@ -35,6 +35,7 @@
 		</main>
 		{{ include('layouts/partials/_footer.html.twig') }}
 		{% block javascripts %}
+		{{ encore_entry_script_tags('app') }}
 			{% include "/layouts/js.html.twig" %}
 		{% endblock %}
 		</div>
