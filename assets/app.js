@@ -9,8 +9,9 @@
 import './styles/app.css';
 
 // start the Stimulus application
-import './bootstrap';
-
+import './bootstrap'; 
+import $ from 'jquery';
+import 'bootstrap';
 
 $(document).ready(function() {
     $("#success-alert").hide();
