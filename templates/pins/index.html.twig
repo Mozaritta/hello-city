@@ -9,22 +9,27 @@
 </style> #}
 
 <div class="example-wrapper">
-    <h2 class="text-4xl mb-4">{% if (pins|length == 1) %}
+    <h2 class="text-4xl mb-4 text-center text-muted">{% if (pins|length == 1) %}
         1 Pin ✅
     {% elseif (pins|length == 0) %}
-        No pins! ✅
+        No pins yet. Be the first! <a href="{{ path('app_home') }}">Create One </a>✅
     {% else %}
         {{pins|length}} pins! ✅
     {% endif %}
     </h1>
-
-    {% for pin in pins %}
-    <article>
-        <h2 class="text-2xl mb-2"><a href="{{ path('app_pins_show',{'id': pin.id}) }}">{{ pin.title }}</a></h2>
-        <h2 class="text-1xl">{{ pin.description }}</h2>
-        <small class="text-center mb-2"> Submitted {{ pin.createdAt|ago }}</small>
-    </article>
+    {% for row in pins|batch(3) %}
+    <div class="row mb-4">
+    {% for pin in row %}
+    <div class="col-md-4">
+        <article class="bg-white py-4 px-4 rounded shadow">
+            <h2 class="text-2xl mb-2"><a href="{{ path('app_pins_show',{'id': pin.id}) }}">{{ pin.title }}</a></h2>
+            <h2 class="text-1xl">{{ pin.description }}</h2>
+            <small class="text-center mb-2"> Submitted {{ pin.createdAt|ago }}</small>
+        </article>
+    </div>
     {% endfor %}
-    
+    </div>
+    {% endfor %}
+
 </div>
 {% endblock %}
