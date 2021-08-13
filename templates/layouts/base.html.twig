@@ -27,8 +27,11 @@
 				</li>
 			</ul>
 		</nav> #}
-		<main role="main" class="container my-12 md:w-48 dark:bg-blue-800 flex flex-col items-center justify-center">
+		<main role="main" class="container ">
+		<div class="row">
+		<div class="col-md-4 mx-auto">
 		{% block body %}{% endblock %}
+		</div></div>
 		</main>
 		{{ include('layouts/partials/_footer.html.twig') }}
 		{% block javascripts %}

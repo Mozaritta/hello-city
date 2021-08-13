@@ -1,4 +1,5 @@
 {% extends 'layouts/base.html.twig' %}
+{% block title "Show pin" %}
 
 {% block body %}
 
@@ -12,9 +13,9 @@
     {% endif %}
     {% if found %}
     
-        {% block title "Show pin" %}
+        <h1 class="text-4xl mb-4 dark:text-white"> Show pin</h1>
         <article>
-            <h1>{{ pin.title }}</h1>
+            <h2 class="text-2xl mb-2">{{ pin.title }}</h1>
             <p> {{ pin.description|u.truncate(10, '... ', false) }}</p>
             <small> Submitted {{ pin.createdAt|ago }}</small>
              
@@ -35,7 +36,7 @@
                 </form> #}
             </ul>
             </nav>
-        <footer><a href="{{ path('app_home') }}">Go Home</a></footer>
+        {# <footer><a href="{{ path('app_home') }}">Go Home</a></footer> #}
 
     {% else %}
         <article>
