@@ -2,7 +2,7 @@
 {% block title "Show pin" %}
 
 {% block body %}
-
+<div class="container bg-white shadow rounded px-4 py-4">
     {% set found = true %}
         {% set test = 'No Pin' %}
 
@@ -13,35 +13,19 @@
     {% endif %}
     {% if found %}
     
-        <h1 class="text-4xl mb-4 dark:text-white"> Show pin</h1>
-        <article>
+        <h1 class="text-4xl mb-4 dark:text-white text-center"> Show pin</h1>
+        <article class="px-2 py-2">
             <h2 class="text-2xl mb-2">{{ pin.title }}</h1>
             <p> {{ pin.description|u.truncate(10, '... ', false) }}</p>
-            <small> Submitted {{ pin.createdAt|ago }}</small>
-             
+            <small class="text-muted"> Submitted {{ pin.createdAt|ago }}</small>
         </article>
-        <nav>
-            <ul>
-                <li><a class="btn btn-primary btn-block" href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
-                <li><a class="btn btn-danger btn-block" href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a></li>
-                {# <li><a href="#" onclick="event.preventDefault(); confirm('You sure you want to delete?') && document.getElementById('js-form').submit();">Delete</a></li> #}
-                {# <form 
-                    display="none"
-                    id="js-form"
-                    action="{{ path('app_delete', {'id': pin.id}) }}"
-                    method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" value="{{ csrf_token('delete-pin' ~ pin.id) }}">
-                        <input type="submit" value="Delete">
-                </form> #}
-            </ul>
-            </nav>
-        {# <footer><a href="{{ path('app_home') }}">Go Home</a></footer> #}
-
+                <a class="btn btn-primary btn-block" href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
+                <a class="btn btn-danger btn-block" href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>
+                
     {% else %}
         <article>
             <h1>{{message}}</h1>
         </article>
     {% endif %}
-
+</div>
 {% endblock %}
