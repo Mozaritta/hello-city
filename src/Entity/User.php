@@ -203,4 +203,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    /**
+     * public function removePin(Pin $pin): self{
+     * if ($this->pins->contains($pin)){
+     *   if ($this->pins->removeElement($pin)) {
+     *      //set the owning side to null (unless already changed)
+     *      if ($pin->getUser() === $this) {
+     *          $pin->setUser(null);
+     *      }
+     *  }
+     * }
+     * }
+     */
 }
