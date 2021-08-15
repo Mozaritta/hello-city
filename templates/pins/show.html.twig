@@ -17,7 +17,7 @@
         <article class="px-2 py-2">
             <h2 class="text-2xl mb-2">{{ pin.title }}</h1>
             <p> {{ pin.description|u.truncate(10, '... ', false) }}</p>
-            <small class="text-muted"> Submitted {{ pin.createdAt|ago }}</small>
+            <small class="text-muted"> Submitted {{ pin.createdAt|ago }} by {{pin.user.fullname}} </small>
         </article>
                 <a class="btn btn-primary btn-block" href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
                 <a class="btn btn-danger btn-block" href="{{ path('app_delete', {id: pin.id}) }}" onclick="return confirm('You sure you want to delete?')">Delete</a>

@@ -203,6 +203,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getFullName()
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
     /**
      * public function removePin(Pin $pin): self{
      * if ($this->pins->contains($pin)){
