@@ -15,8 +15,8 @@
     
         <h1 class="text-4xl mb-4 dark:text-white text-center"> Show pin</h1>
         <article class="px-2 py-2">
-            <h2 class="text-2xl mb-2">{{ pin.title }}</h1>
-            <p> {{ pin.description|u.truncate(10, '... ', false) }}</p>
+            <h2 class="text-2xl mb-2 text-break">{{ pin.title }}</h1>
+            <p class="text-break"> {{ pin.description|u.truncate(10, '... ', false) }}</p>
             <small class="text-muted"> Submitted {{ pin.createdAt|ago }} by {{pin.user.fullname}} </small>
         </article>
                 <a class="btn btn-primary btn-block" href="{{ path('app_edit', {id: pin.id}) }}">Edit</a></li>
