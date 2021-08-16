@@ -169,14 +169,14 @@ class PinsController extends AbstractController
                 $em->flush();
                 $message = 'Pin deleted successfully';
                 $this->addFlash(
-                    'danger',
+                    'warning',
                     $message
                 );
                 // }
                 return $this->redirectToRoute('app_home');
             } else {
                 $this->addFlash(
-                    'danger',
+                    'warning',
                     'You didn\' create this pin so you can\'t delete it :/'
                 );
                 return $this->redirectToRoute('app_home');
