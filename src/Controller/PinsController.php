@@ -95,7 +95,7 @@ class PinsController extends AbstractController
             ]);
         } else {
             $this->addFlash(
-                'danger',
+                'warning',
                 'You are not logged in!'
             );
             return $this->redirectToRoute('app_login');
@@ -144,7 +144,7 @@ class PinsController extends AbstractController
             }
         } else {
             $this->addFlash(
-                'danger',
+                'warning',
                 'You are not logged in!'
             );
             return $this->redirectToRoute('app_login');
@@ -176,14 +176,14 @@ class PinsController extends AbstractController
                 return $this->redirectToRoute('app_home');
             } else {
                 $this->addFlash(
-                    'info',
+                    'danger',
                     'You didn\' create this pin so you can\'t delete it :/'
                 );
                 return $this->redirectToRoute('app_home');
             }
         } else {
             $this->addFlash(
-                'danger',
+                'warning',
                 'You are not logged in!'
             );
             return $this->redirectToRoute('app_login');

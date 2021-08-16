@@ -5,6 +5,7 @@ namespace App\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -15,23 +16,26 @@ use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
-
+    private $flash;
     private UrlGeneratorInterface $urlGenerator;
     // private UserRepository $userRepository;
     // private CsrfTokenManagerInterface $csrfTokenManager;
 
     public function __construct(
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        FlashBagInterface $flash
         // CsrfTokenManagerInterface $csrfTokenManager,
         // UserRepository $userRepository
     ) {
         $this->urlGenerator = $urlGenerator;
+        $this->flash = $flash;
         // $this->csrfTokenManager = $csrfTokenManager;
         // $this->userRepository = $userRepository;
     }
@@ -50,7 +54,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-
     // public function getUser(Request $request)
     // {
     //     $token = new CsrfToken('authenticate', $request->get('_csrf_token'));
@@ -67,9 +70,16 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+        $session = new Session();
         // dd($token->getUser());
         // For example:
         // dd($request->get('email'));
+        // $session->set('flashName', 'success');
+        // $session->set('flashMessage', 'success');
+        // dd($session);
+        $session->getFlashBag()->add('success', 'Logged in!');
+        $this->flash->set('sucuess', 'Logged In!');
+        $session->clear();
         return new RedirectResponse($this->urlGenerator->generate('app_home'));
 
         throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
