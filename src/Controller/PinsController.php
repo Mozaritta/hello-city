@@ -23,6 +23,7 @@ class PinsController extends AbstractController
 
     /**
      * @Route("/", name="app_home", methods="GET")
+     * @Route("/pin/app_home")
      */
     public function index(PinRepository $pinRepository): Response
     {
@@ -32,10 +33,11 @@ class PinsController extends AbstractController
     /**
      * @Route("/pin/{id<[0-9]+>}",methods={"GET","HEAD"}, name="app_pins_show")
      */
-    public function show(PinRepository $pinRepository, int $id): Response
+    public function show(AuthenticationUtils $authenticationUtils, PinRepository $pinRepository, int $id): Response
     {
         // $pin = ;
         // return dd($_GET['pin']);
+        // dd($authenticationUtils->getLastUsername());
         $connection = mysqli_connect("localhost", "root", "", "pinterest");
         $query = "SELECT * FROM pins WHERE id = $id";
         $result = mysqli_query($connection, $query);
@@ -61,7 +63,8 @@ class PinsController extends AbstractController
     public function create(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
-            dd($authenticationUtils->getLastUsername());
+            // dd($authenticationUtils->getLastUsername());
+            // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
             $pin = new Pin;
             $form = $this->createForm(PinType::class, $pin);
             // $form = $this->createFormBuilder($pin)
@@ -91,6 +94,10 @@ class PinsController extends AbstractController
                 'form' => $form->createView()
             ]);
         } else {
+            $this->addFlash(
+                'danger',
+                'You are not logged in!'
+            );
             return $this->redirectToRoute('app_login');
         }
     }
@@ -100,6 +107,7 @@ class PinsController extends AbstractController
     public function edit(AuthenticationUtils $authenticationUtils, PinRepository $pinRepository, Request $request, int $id, EntityManagerInterface $em): Response
     {
         if ($authenticationUtils->getLastUsername()) {
+            // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
             $pin = $pinRepository->findOneBy(['id' => $id]);
             $user = $pin->getUser()->getId();
             $connection = mysqli_connect("localhost", "root", "", "pinterest");
@@ -135,6 +143,10 @@ class PinsController extends AbstractController
                 return $this->redirectToRoute('app_home');
             }
         } else {
+            $this->addFlash(
+                'danger',
+                'You are not logged in!'
+            );
             return $this->redirectToRoute('app_login');
         }
     }
@@ -170,6 +182,10 @@ class PinsController extends AbstractController
                 return $this->redirectToRoute('app_home');
             }
         } else {
+            $this->addFlash(
+                'danger',
+                'You are not logged in!'
+            );
             return $this->redirectToRoute('app_login');
         }
     }
