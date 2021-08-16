@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 
 
 
@@ -56,78 +58,119 @@ class PinsController extends AbstractController
     /**
      * @Route("/pin/create", name="pin_create", methods="GET|POST")
      */
-    public function create(Request $request, EntityManagerInterface $em): Response
+    public function create(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
     {
-        $pin = new Pin;
-        $form = $this->createForm(PinType::class, $pin);
-        // $form = $this->createFormBuilder($pin)
-        //     // $form = $this->createFormBuilder(new Pin)
-        //     ->add('title')
-        //     ->add('description')
-        //     // // // ->add('submit', SubmitType::class)
-        //     ->getForm();
-        $form->handleRequest($request);
+        if ($authenticationUtils->getLastUsername()) {
+            dd($authenticationUtils->getLastUsername());
+            $pin = new Pin;
+            $form = $this->createForm(PinType::class, $pin);
+            // $form = $this->createFormBuilder($pin)
+            //     // $form = $this->createFormBuilder(new Pin)
+            //     ->add('title')
+            //     ->add('description')
+            //     // // // ->add('submit', SubmitType::class)
+            //     ->getForm();
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // $pin = $form->getData();
-            // // $data = $form->getData();
-            // // $pin = new Pin;
-            // // $pin->setTitle($data['title']);
-            // // $pin->setDescription($data['description']);
-            $em->persist($pin);
-            $em->flush();
-            $this->addFlash(
-                'success',
-                'Pin added successfully'
-            );
-            return $this->redirectToRoute('app_home');
+            if ($form->isSubmitted() && $form->isValid()) {
+                // $pin = $form->getData();
+                // // $data = $form->getData();
+                // // $pin = new Pin;
+                // // $pin->setTitle($data['title']);
+                // // $pin->setDescription($data['description']);
+                $em->persist($pin);
+                $em->flush();
+                $this->addFlash(
+                    'success',
+                    'Pin added successfully'
+                );
+                return $this->redirectToRoute('app_home');
+            }
+
+            return $this->render('pins/create.html.twig', [
+                'form' => $form->createView()
+            ]);
+        } else {
+            return $this->redirectToRoute('app_login');
         }
-
-        return $this->render('pins/create.html.twig', [
-            'form' => $form->createView()
-        ]);
     }
     /**
      * @Route("/pin/edit/{id<[0-9]+>}", methods={"GET","HEAD", "POST"}, name="app_edit")
      */
-    public function edit(PinRepository $pinRepository, Request $request, int $id, EntityManagerInterface $em): Response
+    public function edit(AuthenticationUtils $authenticationUtils, PinRepository $pinRepository, Request $request, int $id, EntityManagerInterface $em): Response
     {
-        $pin = $pinRepository->findOneBy(['id' => $id]);
-        $form = $this->createForm(PinType::class, $pin);
-        // $form = $this->createFormBuilder($pin)
-        //     ->add('title')
-        //     ->add('description')
-        //     ->getForm();
-        $form->handleRequest($request);
+        if ($authenticationUtils->getLastUsername()) {
+            $pin = $pinRepository->findOneBy(['id' => $id]);
+            $user = $pin->getUser()->getId();
+            $connection = mysqli_connect("localhost", "root", "", "pinterest");
+            $query = "SELECT email FROM users WHERE id = $user";
+            $result = mysqli_query($connection, $query);
+            $yes = mysqli_fetch_assoc($result);
+            // dd($yes);
+            if ($yes === $authenticationUtils->getLastUsername()) {
+                $form = $this->createForm(PinType::class, $pin);
+                // $form = $this->createFormBuilder($pin)
+                //     ->add('title')
+                //     ->add('description')
+                //     ->getForm();
+                $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-            $this->addFlash(
-                'info',
-                'Pin updated successfully'
-            );
-            return $this->redirectToRoute('app_home');
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em->flush();
+                    $this->addFlash(
+                        'info',
+                        'Pin updated successfully'
+                    );
+                    return $this->redirectToRoute('app_home');
+                }
+                return $this->render('pins/edit.html.twig', [
+                    'pin' => $pin,
+                    'form' => $form->createView()
+                ]);
+            } else {
+                $this->addFlash(
+                    'info',
+                    'You didn\' create this pin so you can\'t update it :/'
+                );
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            return $this->redirectToRoute('app_login');
         }
-        return $this->render('pins/edit.html.twig', [
-            'pin' => $pin,
-            'form' => $form->createView()
-        ]);
     }
     /**
      * @Route("/pin/delete/{id<[0-9]+>}", name="app_delete", methods={"GET", "HEAD", "POST", "DELETE"})
      */
-    public function delete(Request $request, PinRepository $pinRepository, int $id, EntityManagerInterface $em): Response
+    public function delete(AuthenticationUtils $authenticationUtils, Request $request, PinRepository $pinRepository, int $id, EntityManagerInterface $em): Response
     {
-        $pinn = $pinRepository->findOneBy(['id' => $id]);
-        // if ($this->isCsrfTokenValid('delete-pin', $pinn->getId(), $request->request->get('csrf_token'))) {
-        $em->remove($pinn);
-        $em->flush();
-        $message = 'Pin deleted successfully';
-        $this->addFlash(
-            'danger',
-            $message
-        );
-        // }
-        return $this->redirectToRoute('app_home');
+        if ($authenticationUtils->getLastUsername()) {
+            $pinn = $pinRepository->findOneBy(['id' => $id]);
+            $user = $pinn->getUser()->getId();
+            $connection = mysqli_connect("localhost", "root", "", "pinterest");
+            $query = "SELECT email FROM users WHERE id = $user";
+            $result = mysqli_query($connection, $query);
+            $yes = mysqli_fetch_assoc($result);
+            // dd($yes);
+            if ($yes === $authenticationUtils->getLastUsername()) {
+                // if ($this->isCsrfTokenValid('delete-pin', $pinn->getId(), $request->request->get('csrf_token'))) {
+                $em->remove($pinn);
+                $em->flush();
+                $message = 'Pin deleted successfully';
+                $this->addFlash(
+                    'danger',
+                    $message
+                );
+                // }
+                return $this->redirectToRoute('app_home');
+            } else {
+                $this->addFlash(
+                    'info',
+                    'You didn\' create this pin so you can\'t delete it :/'
+                );
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            return $this->redirectToRoute('app_login');
+        }
     }
 }
