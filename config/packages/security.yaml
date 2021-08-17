@@ -21,6 +21,7 @@ security:
     main:
       remember_me:
         secret: "%kernel.secret%"
+        lifetime: 86400 # 1 day in seconds
         path: /
       lazy: true
       provider: app_user_provider
