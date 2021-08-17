@@ -15,7 +15,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+// use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -27,10 +28,10 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
-        FlashBagInterface $flash
+        // FlashBagInterface $flash
     ) {
         $this->urlGenerator = $urlGenerator;
-        $this->flash = $flash;
+        // $this->flash = $flash;
     }
 
     public function authenticate(Request $request): PassportInterface
@@ -52,7 +53,10 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        $this->flash->set('info', 'Logged In!');
+        $session = new Session();
+        $request->setSession($session);
+        $request->getSession()->getFLashBag()->add('success', 'Welcome to your new session ' . $token->getUser()->getFullName());
+        // $this->flash->set('info', 'Logged In!');
         return new RedirectResponse($this->urlGenerator->generate('app_home'));
 
         throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);

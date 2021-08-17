@@ -7,13 +7,10 @@ use App\Form\PinType;
 use App\Repository\PinRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Id;
-// use Symfony\Component\Form\Extension\Core\Type\TextType;
-// use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 
@@ -51,7 +48,7 @@ class PinsController extends AbstractController
         } else {
             $message = "No such Pin in the database!";
             $this->addFlash(
-                'success',
+                'info',
                 $message
             );
             return $this->render('pins/show.html.twig', compact('message'));
@@ -88,7 +85,7 @@ class PinsController extends AbstractController
                 $em->persist($pin);
                 $em->flush();
                 $this->addFlash(
-                    'info',
+                    'primary',
                     'Pin added successfully'
                 );
                 return $this->redirectToRoute('app_home');
@@ -130,7 +127,7 @@ class PinsController extends AbstractController
                 if ($form->isSubmitted() && $form->isValid()) {
                     $em->flush();
                     $this->addFlash(
-                        'info',
+                        'success',
                         'Pin updated successfully'
                     );
                     return $this->redirectToRoute('app_home');
@@ -141,7 +138,7 @@ class PinsController extends AbstractController
                 ]);
             } else {
                 $this->addFlash(
-                    'info',
+                    'warning',
                     'You didn\' create this pin so you can\'t update it :/'
                 );
                 return $this->redirectToRoute('app_home');
