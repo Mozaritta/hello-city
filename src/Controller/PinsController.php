@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Pin;
 use App\Form\PinType;
 use App\Repository\PinRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Id;
 // use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -60,9 +61,10 @@ class PinsController extends AbstractController
     /**
      * @Route("/pin/create", name="pin_create", methods="GET|POST")
      */
-    public function create(AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
+    public function create(UserRepository $userRepository, AuthenticationUtils $authenticationUtils, Request $request, EntityManagerInterface $em): Response
     {
-        if ($authenticationUtils->getLastUsername()) {
+        $email = $authenticationUtils->getLastUsername();
+        if ($email) {
             // dd($authenticationUtils->getLastUsername());
             // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
             $pin = new Pin;
@@ -81,10 +83,12 @@ class PinsController extends AbstractController
                 // // $pin = new Pin;
                 // // $pin->setTitle($data['title']);
                 // // $pin->setDescription($data['description']);
+                $user = $userRepository->findOneBy(['email' => $email]);
+                $pin->setUser($user);
                 $em->persist($pin);
                 $em->flush();
                 $this->addFlash(
-                    'success',
+                    'info',
                     'Pin added successfully'
                 );
                 return $this->redirectToRoute('app_home');
@@ -114,8 +118,8 @@ class PinsController extends AbstractController
             $query = "SELECT email FROM users WHERE id = $user";
             $result = mysqli_query($connection, $query);
             $yes = mysqli_fetch_assoc($result);
-            // dd($yes);
-            if ($yes === $authenticationUtils->getLastUsername()) {
+            // dd($yes['email']);
+            if ($yes['email'] === $authenticationUtils->getLastUsername()) {
                 $form = $this->createForm(PinType::class, $pin);
                 // $form = $this->createFormBuilder($pin)
                 //     ->add('title')
@@ -163,27 +167,27 @@ class PinsController extends AbstractController
             $result = mysqli_query($connection, $query);
             $yes = mysqli_fetch_assoc($result);
             // dd($yes);
-            if ($yes === $authenticationUtils->getLastUsername()) {
+            if ($yes['email'] === $authenticationUtils->getLastUsername()) {
                 // if ($this->isCsrfTokenValid('delete-pin', $pinn->getId(), $request->request->get('csrf_token'))) {
                 $em->remove($pinn);
                 $em->flush();
                 $message = 'Pin deleted successfully';
                 $this->addFlash(
-                    'warning',
+                    'danger',
                     $message
                 );
                 // }
                 return $this->redirectToRoute('app_home');
             } else {
                 $this->addFlash(
-                    'warning',
+                    'danger',
                     'You didn\' create this pin so you can\'t delete it :/'
                 );
                 return $this->redirectToRoute('app_home');
             }
         } else {
             $this->addFlash(
-                'warning',
+                'danger',
                 'You are not logged in!'
             );
             return $this->redirectToRoute('app_login');

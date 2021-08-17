@@ -24,19 +24,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
     private $flash;
     private UrlGeneratorInterface $urlGenerator;
-    // private UserRepository $userRepository;
-    // private CsrfTokenManagerInterface $csrfTokenManager;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         FlashBagInterface $flash
-        // CsrfTokenManagerInterface $csrfTokenManager,
-        // UserRepository $userRepository
     ) {
         $this->urlGenerator = $urlGenerator;
         $this->flash = $flash;
-        // $this->csrfTokenManager = $csrfTokenManager;
-        // $this->userRepository = $userRepository;
     }
 
     public function authenticate(Request $request): PassportInterface
@@ -53,28 +47,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    // public function getUser(Request $request)
-    // {
-    //     $token = new CsrfToken('authenticate', $request->get('_csrf_token'));
-    //     if ($this->csrfTokenManager->isTokenValid($token)) {
-    //         throw new InvalidCsrfTokenException;
-    //     }
-    //     $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $request->request->get('email', '')]);
-    //     dd($user);
-    //     return $user;
-    // }
-
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        // dd($token->getUser());
-        // For example:
-        // dd($request->get('email'));
-        // $session->set('flashName', 'success');
-        // $session->set('flashMessage', 'success');
-        // dd($session);
         $this->flash->set('info', 'Logged In!');
         return new RedirectResponse($this->urlGenerator->generate('app_home'));
 
