@@ -27,8 +27,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private UrlGeneratorInterface $urlGenerator;
 
     public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        // FlashBagInterface $flash
+        UrlGeneratorInterface $urlGenerator
+        //, FlashBagInterface $flash
     ) {
         $this->urlGenerator = $urlGenerator;
         // $this->flash = $flash;
