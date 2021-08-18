@@ -11,8 +11,15 @@
     <h1 class="h3 mb-3 font-weight-normal text-center">Register</h1>
 
     {{ form_start(registrationForm) }}
+    <div class="container">
+    <div class="row">
+    <div class="col">
         {{ form_row(registrationForm.firstName) }}
+        </div>
+        <div class="col">
         {{ form_row(registrationForm.lastName) }}
+        </div>
+        </div>
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
@@ -22,5 +29,6 @@
         <button type="submit" class="btn btn-primary">Register</button>
         </div>
         <p class="mt-4 text-center text-muted"> Already registred ? <a class="link-primary" href="{{ path('app_login') }}">Sign in!</a></p>
+        </div>
     {{ form_end(registrationForm) }}
 {% endblock %}
