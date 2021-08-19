@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
@@ -28,43 +29,48 @@ class RegistrationController extends AbstractController
      */
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        if ($this->getUser()) {
+            $this->addFlash('warning', 'You\'re already registerd in!');
+            return $this->redirectToRoute('app_home');
+        } else {
+            $user = new User();
+            $form = $this->createForm(RegistrationFormType::class, $user);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // hash the plain password
-            // $form->getData()= $user
-            $user->setPassword(
-                $passwordHasher->hashPassword(
+            if ($form->isSubmitted() && $form->isValid()) {
+                // hash the plain password
+                // $form->getData()= $user
+                $user->setPassword(
+                    $passwordHasher->hashPassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+
+                $entityManager = $this->getDoctrine()->getManager();
+                // dd($user);
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // generate a signed url and email it to the user
+                $this->emailVerifier->sendEmailConfirmation(
+                    'app_verify_email',
                     $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+                    (new TemplatedEmail())
+                        ->from(new Address('noreplay@pinterest.clone.com', 'Pinterest Clone'))
+                        ->to($user->getEmail())
+                        ->subject('Please Confirm your Email')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+                // do anything else you need here, like send an email
 
-            $entityManager = $this->getDoctrine()->getManager();
-            // dd($user);
-            $entityManager->persist($user);
-            $entityManager->flush();
+                // return $this->redirectToRoute('app_verify');
+            }
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
-                $user,
-                (new TemplatedEmail())
-                    ->from(new Address('noreplay@pinterest.clone.com', 'Pinterest Clone'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
-
-            return $this->redirectToRoute('app_verify');
+            return $this->render('registration/register.html.twig', [
+                'registrationForm' => $form->createView(),
+            ]);
         }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
     }
 
     /**
@@ -72,8 +78,15 @@ class RegistrationController extends AbstractController
      */
     public function VerifyUser(): Response
     {
-        $url = 'https://mailtrap.io/inboxes/1378515/messages';
-        return $this->render('/registration/verify.html.twig', compact('url'));
+        if ($this->getUser()) {
+            if ($this->getUser()->isVerified()) {
+                $this->addFlash('warning', 'You\'re already verified!');
+                return $this->redirectToRoute('app_home');
+            }
+        } else {
+            $url = 'https://mailtrap.io/inboxes/1378515/messages';
+            return $this->render('/registration/verify.html.twig', compact('url'));
+        }
     }
 
     /**
