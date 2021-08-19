@@ -53,11 +53,18 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        $session = new Session();
-        $request->setSession($session);
-        $request->getSession()->getFLashBag()->add('success', 'Welcome to your new session ' . $token->getUser()->getFullName());
-        // $this->flash->set('info', 'Logged In!');
-        return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        // dd($token->getUser()->isVerified());
+        if ($token->getUser()->isVerified() === false) {
+            $request->getSession()->clear();
+            $request->getSession()->getFLashBag()->add('danger', 'Your mail is not verified!');
+            return new RedirectResponse($this->urlGenerator->generate('app_verify'));
+        } else {
+            $session = new Session();
+            $request->setSession($session);
+            $request->getSession()->getFLashBag()->add('success', 'Welcome to your new session ' . $token->getUser()->getFullName());
+            // $this->flash->set('info', 'Logged In!');
+            return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        }
 
         throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
     }
